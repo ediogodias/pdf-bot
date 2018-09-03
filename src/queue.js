@@ -116,6 +116,8 @@ function processJob (db, generator, job, webhookOptions) {
               _markAsCompleted(db, job.id),
               _setStorage(db, job.id, response.storage)
             ]).then(function () {
+              var webhookOptions = Object.assign(webhookOptions, (job.meta.webhook || {}))
+
               if (!webhookOptions) {
                 return response
               }
