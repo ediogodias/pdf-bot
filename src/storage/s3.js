@@ -22,16 +22,12 @@ function createS3Storage(options = {}) {
 
   return function uploadToS3 (localPath, job) {
     return new Promise((resolve, reject) => {
-      var awsS3Client = new AWS.S3(Object.assign(options.s3ClientOptions || {},
-        {
-          s3Options: {
-            accessKeyId: options.accessKeyId,
-            secretAccessKey: options.secretAccessKey,
-            region: options.region,
-            signatureVersion: 'v4'
-          }
-        })
-      )
+      var awsS3Client = new AWS.S3({
+        accessKeyId: options.accessKeyId,
+        secretAccessKey: options.secretAccessKey,
+        region: options.region,
+        signatureVersion: 'v4'
+      })
       var client = s3.createClient({
         s3Client: awsS3Client
       });
