@@ -1,4 +1,5 @@
 var debug = require('debug')('pdf:s3')
+var AWS = require('aws-sdk');
 var s3 = require('s3')
 var path = require('path')
 
@@ -21,17 +22,19 @@ function createS3Storage(options = {}) {
 
   return function uploadToS3 (localPath, job) {
     return new Promise((resolve, reject) => {
-      var client = s3.createClient(
-          Object.assign(options.s3ClientOptions || {},
-          {
-            s3Options: {
-              accessKeyId: options.accessKeyId,
-              secretAccessKey: options.secretAccessKey,
-              region: options.region,
-            }
+      var awsS3Client = new AWS.S3(Object.assign(options.s3ClientOptions || {},
+        {
+          s3Options: {
+            accessKeyId: options.accessKeyId,
+            secretAccessKey: options.secretAccessKey,
+            region: options.region,
+            signatureVersion: 'v4'
           }
-        )
+        })
       )
+      var client = s3.createClient({
+        s3Client: awsS3Client
+      });
 
       var remotePath = (options.path || '')
       if (typeof options.path === 'function') {

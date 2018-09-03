@@ -26,6 +26,7 @@
     "test:watch": "mocha -w test/*.test.js --recursive"
   },
   "dependencies": {
+    "aws-sdk": "^2.307.0",
     "body-parser": "^1.17.2",
     "cli-table": "^0.3.1",
     "commander": "^2.11.0",
