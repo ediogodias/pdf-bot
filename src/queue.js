@@ -116,16 +116,14 @@ function processJob (db, generator, job, webhookOptions) {
               _markAsCompleted(db, job.id),
               _setStorage(db, job.id, response.storage)
             ]).then(function () {
-              var webhookOptions = Object.assign(webhookOptions, (job.meta.webhook || {}))
-
-              if (!webhookOptions) {
+              if (!webhook) {
                 return response
               }
 
               // Re-fetch the job as storage has been added
               return getById(db, job.id).then(function (job) {
                 // Important to return promise otherwise the npm cli process will exit early
-                return attemptPing(db, job, webhookOptions)
+                return attemptPing(db, job, webhook)
                   .then(function() {
                     return response
                   })
